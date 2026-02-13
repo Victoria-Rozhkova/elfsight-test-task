@@ -1,8 +1,8 @@
+import { useCallback, useEffect } from 'react';
 import styled, { css } from 'styled-components';
 import { PopupEpisodes } from './PopupEpisodes';
 import { PopupHeader } from './PopupHeader';
 import { PopupInfo } from './PopupInfo';
-import { useCallback, useEffect } from 'react';
 
 export function Popup({ settings: { visible, content = {} }, setSettings }) {
   const {
@@ -51,7 +51,6 @@ export function Popup({ settings: { visible, content = {} }, setSettings }) {
       document.body.style.overflow = '';
     }
 
-    // Очистка на случай размонтирования компонента
     return () => {
       document.body.style.overflow = '';
     };

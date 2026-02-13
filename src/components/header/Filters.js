@@ -1,22 +1,24 @@
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import axios from 'axios';
+
+import { useData } from '../providers';
+import { API_URL } from '../providers/DataProvider';
 import { CustomSelect } from '../ui/select';
 import { CustomInput } from '../ui/input';
 import { Button } from '../ui/button';
-import { useData } from '../providers';
-import { API_URL } from '../providers/DataProvider';
-import axios from 'axios';
 
 export function Filters() {
   const [speciesOptions, setSpeciesOptions] = useState([]);
   const [loadingSpecies, setLoadingSpecies] = useState(true);
-  const [filters, setFilters] = useState({
+  const INITIAL_FILTERS = {
     status: '',
     gender: '',
     species: '',
     name: '',
     type: ''
-  });
+  };
+  const [filters, setFilters] = useState(INITIAL_FILTERS);
   const { setApiURL } = useData();
 
   const applyHandler = () => {
@@ -32,14 +34,7 @@ export function Filters() {
   };
 
   const resetHandler = () => {
-    setFilters({
-      status: '',
-      gender: '',
-      species: '',
-      name: '',
-      type: ''
-    });
-
+    setFilters(INITIAL_FILTERS);
     setApiURL(API_URL);
   };
 
@@ -49,7 +44,6 @@ export function Filters() {
         const firstPage = await axios.get(`${API_URL}?page=1`);
         const totalPages = firstPage.data.info.pages;
 
-        // Создаем массив промисов для всех страниц
         const promises = [];
         for (let i = 1; i <= totalPages; i++) {
           promises.push(axios.get(`${API_URL}?page=${i}`));

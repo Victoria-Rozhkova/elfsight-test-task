@@ -1,15 +1,11 @@
-import styled from 'styled-components';
 import { useEffect, useRef, useState } from 'react';
+import styled from 'styled-components';
+import { SelectOptions } from './SelectOptions';
 
-export function CustomSelect({
-  options,
-  value,
-  placeholder,
-  onChange,
-  isLoading = false
-}) {
-  const [open, setOpen] = useState(false);
+export function CustomSelect(props) {
+  const { options, value, placeholder, onChange, isLoading = false } = props;
   const ref = useRef(null);
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -84,26 +80,13 @@ export function CustomSelect({
       </SelectHeader>
 
       {open && (
-        <Options>
-          {!options?.length && !isLoading ? (
-            <NotFound>Options not found</NotFound>
-          ) : isLoading ? (
-            <LoadingText>Loading...</LoadingText>
-          ) : (
-            options.map((option) => (
-              <Option
-                key={option}
-                $active={option === value}
-                onClick={() => {
-                  onChange(option);
-                  setOpen(false);
-                }}
-              >
-                {option}
-              </Option>
-            ))
-          )}
-        </Options>
+        <SelectOptions
+          value={value}
+          options={options}
+          isLoading={isLoading}
+          setOpen={setOpen}
+          onChange={onChange}
+        />
       )}
     </SelectWrapper>
   );
@@ -161,44 +144,6 @@ const SelectHeader = styled.div`
 const Arrow = styled.span`
   transition: 0.2s ease;
   transform: ${({ $open }) => ($open ? 'rotate(180deg)' : 'rotate(0)')};
-`;
-
-const Options = styled.div`
-  max-height: 160px;
-  font-family: Inter, sans-serif;
-  font-size: 16px;
-  position: absolute;
-  width: 100%;
-  margin-top: 5px;
-  background: #ffffff;
-  border: 1px solid #d9d9d9;
-  border-radius: 12px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
-  overflow: auto;
-  z-index: 10;
-`;
-
-const NotFound = styled.div`
-  padding: 15px;
-  text-align: center;
-`;
-
-const LoadingText = styled.div`
-  padding: 15px;
-  text-align: center;
-`;
-
-const Option = styled.div`
-  padding: 7px;
-  cursor: pointer;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  font-weight: ${({ $active }) => ($active ? 600 : 400)};
-
-  &:hover {
-    background: #83bf4633;
-  }
 `;
 
 const ClearButton = styled.div`
